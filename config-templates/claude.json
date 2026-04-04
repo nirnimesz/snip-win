@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "snip-win": {
+      "command": "node",
+      "args": ["C:\\Users\\<YOUR_USER>\\Documents\\snip-win\\src\\mcp\\server.js"]
+    }
+  }
+}

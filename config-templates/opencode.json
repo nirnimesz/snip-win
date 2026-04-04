@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "snip-win": {
+      "type": "local",
+      "command": ["node", "C:\\Users\\<YOUR_USER>\\Documents\\snip-win\\src\\mcp\\server.js"],
+      "enabled": true
+    }
+  }
+}
