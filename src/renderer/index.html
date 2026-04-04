@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: file:; connect-src 'self';">
-  <title>SnipWin — Visual Review</title>
+  <title>SnipWin — Developer Visual Toolkit</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Highlight.js for code screenshots -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" id="hljsTheme">
 </head>
 <body>
   <div id="app" class="app-container">
@@ -13,17 +15,17 @@
     <header class="app-header">
       <div class="header-left">
         <h1 class="app-title">Snip<span class="accent">Win</span></h1>
-        <span class="app-version">v2.0</span>
+        <span class="app-version">v3.0</span>
       </div>
       <div class="header-right">
-        <button id="btnCaptureScreen" class="btn btn-icon" title="Capture Full Screen (Ctrl+Shift+1)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <button id="btnCaptureScreen" class="btn btn-icon" title="Capture Screen (Ctrl+Shift+1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </button>
         <button id="btnCaptureWindow" class="btn btn-icon" title="Capture Window (Ctrl+Shift+2)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
         </button>
         <button id="btnSettings" class="btn btn-icon" title="Settings">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
       </div>
     </header>
@@ -31,72 +33,94 @@
     <!-- Tabs -->
     <div class="tab-bar">
       <button class="tab-btn active" data-tab="review">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         Review
       </button>
+      <button class="tab-btn" data-tab="tools">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Dev Tools
+      </button>
       <button class="tab-btn" data-tab="gallery">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Gallery
         <span id="galleryCount" class="tab-badge hidden">0</span>
       </button>
     </div>
 
-    <!-- Review Panel -->
-    <div id="reviewPanel" class="review-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- REVIEW PANEL -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="reviewPanel" class="panel review-panel">
       <div id="reviewEmpty" class="review-empty">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
         <h3>Waiting for review request</h3>
         <p>Use the CLI or an AI agent to send content for review</p>
         <div class="quick-actions">
           <button id="btnQuickCapture" class="btn btn-outline">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             Capture Screen
+          </button>
+          <button id="btnQuickCode" class="btn btn-outline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Code Screenshot
           </button>
         </div>
       </div>
 
       <div id="reviewActive" class="review-active hidden">
         <div id="reviewMessage" class="review-message"></div>
+
+        <!-- Export toolbar -->
+        <div class="export-toolbar">
+          <span class="export-label">Export:</span>
+          <button class="export-btn" data-export="png" title="Export as PNG">PNG</button>
+          <button class="export-btn" data-export="svg" title="Export as SVG">SVG</button>
+          <button class="export-btn" data-export="clipboard" title="Copy to clipboard">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+          <button class="export-btn" data-export="base64" title="Copy as base64">B64</button>
+        </div>
+
         <div id="reviewContent" class="review-content"></div>
         <div id="canvasContainer" class="canvas-container">
           <canvas id="annotationCanvas"></canvas>
         </div>
         <div id="annotationToolbar" class="annotation-toolbar">
           <button class="tool-btn active" data-tool="select" title="Select (V)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
           </button>
           <button class="tool-btn" data-tool="rect" title="Rectangle (R)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
           </button>
           <button class="tool-btn" data-tool="arrow" title="Arrow (A)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="12 5 19 5 19 12"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="12 5 19 5 19 12"/></svg>
           </button>
           <button class="tool-btn" data-tool="text" title="Text (T)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9.5" y1="20" x2="14.5" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9.5" y1="20" x2="14.5" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
           </button>
           <button class="tool-btn" data-tool="blur" title="Blur (B)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 0 20" opacity="0.5"/><path d="M12 6a6 6 0 0 1 0 12" opacity="0.7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 0 20" opacity="0.5"/></svg>
           </button>
           <button class="tool-btn" data-tool="freehand" title="Freehand (F)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17c3-3 6-6 9-3s6 6 9 3"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17c3-3 6-6 9-3s6 6 9 3"/></svg>
           </button>
           <div class="toolbar-divider"></div>
           <button id="btnUndo" class="tool-btn" title="Undo (Ctrl+Z)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
           </button>
           <button id="btnClear" class="tool-btn" title="Clear All">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
           </button>
         </div>
         <div class="review-actions">
           <textarea id="reviewText" class="review-text" placeholder="Add your feedback..."></textarea>
           <div class="action-buttons">
             <button id="btnChanges" class="btn btn-changes">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              Request Changes
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Changes
             </button>
             <button id="btnApprove" class="btn btn-approve">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               Approve
             </button>
           </div>
@@ -104,39 +128,357 @@
       </div>
     </div>
 
-    <!-- Gallery Panel -->
-    <div id="galleryPanel" class="gallery-panel hidden">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- DEV TOOLS PANEL -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="toolsPanel" class="panel tools-panel hidden">
+      <!-- Tool selector -->
+      <div class="tool-selector">
+        <button class="tool-tab active" data-tool-tab="code-snippet">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Code Snippet
+        </button>
+        <button class="tool-tab" data-tool-tab="json-viewer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          JSON Viewer
+        </button>
+        <button class="tool-tab" data-tool-tab="regex-tester">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+          Regex
+        </button>
+        <button class="tool-tab" data-tool-tab="css-preview">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          CSS
+        </button>
+        <button class="tool-tab" data-tool-tab="visual-diff">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Diff
+        </button>
+        <button class="tool-tab" data-tool-tab="tree-diagram">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="16" y="2" width="6" height="6" rx="1"/><rect x="9" y="16" width="6" height="6" rx="1"/><path d="M5 8v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M12 13v3"/></svg>
+          Tree
+        </button>
+      </div>
+
+      <!-- Code Snippet Tool -->
+      <div id="toolCodeSnippet" class="tool-content active">
+        <div class="tool-header">
+          <h3>Carbon-Style Code Screenshot</h3>
+          <div class="tool-controls">
+            <select id="codeTheme" class="tool-select">
+              <option value="github-dark">GitHub Dark</option>
+              <option value="one-dark">One Dark</option>
+              <option value="dracula">Dracula</option>
+              <option value="monokai">Monokai</option>
+              <option value="nord">Nord</option>
+              <option value="material">Material</option>
+              <option value="tokyo-night">Tokyo Night</option>
+              <option value="catppuccin">Catppuccin</option>
+            </select>
+            <select id="codeLang" class="tool-select">
+              <option value="auto">Auto-detect</option>
+              <option value="javascript">JavaScript</option>
+              <option value="typescript">TypeScript</option>
+              <option value="python">Python</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="json">JSON</option>
+              <option value="sql">SQL</option>
+              <option value="rust">Rust</option>
+              <option value="go">Go</option>
+              <option value="java">Java</option>
+              <option value="cpp">C++</option>
+              <option value="csharp">C#</option>
+              <option value="bash">Bash</option>
+              <option value="yaml">YAML</option>
+              <option value="markdown">Markdown</option>
+            </select>
+            <label class="tool-checkbox">
+              <input type="checkbox" id="codeLineNumbers" checked>
+              Line Numbers
+            </label>
+            <label class="tool-checkbox">
+              <input type="checkbox" id="codeWindowFrame" checked>
+              Window Frame
+            </label>
+          </div>
+        </div>
+        <div class="tool-body">
+          <textarea id="codeInput" class="code-input" placeholder="Paste your code here..." spellcheck="false"></textarea>
+          <div class="code-preview-wrapper">
+            <div id="codePreview" class="code-preview"></div>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <button id="btnCopyCodePNG" class="btn btn-approve">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy as Image
+          </button>
+          <button id="btnDownloadCodePNG" class="btn btn-outline">Download PNG</button>
+        </div>
+      </div>
+
+      <!-- JSON Viewer Tool -->
+      <div id="toolJsonViewer" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>JSON Tree Visualizer</h3>
+          <div class="tool-controls">
+            <label class="tool-checkbox">
+              <input type="checkbox" id="jsonCollapse" checked>
+              Collapsible
+            </label>
+            <button id="btnFormatJSON" class="btn btn-sm btn-outline">Format</button>
+            <button id="btnMinifyJSON" class="btn btn-sm btn-outline">Minify</button>
+          </div>
+        </div>
+        <div class="tool-body split-view">
+          <textarea id="jsonInput" class="code-input" placeholder='{"paste": "your JSON here"}' spellcheck="false"></textarea>
+          <div id="jsonTree" class="json-tree"></div>
+        </div>
+        <div class="tool-footer">
+          <button id="btnCopyJSONPath" class="btn btn-outline">Copy Path</button>
+          <button id="btnExportJSON" class="btn btn-outline">Export Tree as PNG</button>
+        </div>
+      </div>
+
+      <!-- Regex Tester Tool -->
+      <div id="toolRegexTester" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>Regex Visual Tester</h3>
+          <div class="tool-controls">
+            <label class="tool-checkbox">
+              <input type="checkbox" id="regexCase">
+              Case Insensitive (i)
+            </label>
+            <label class="tool-checkbox">
+              <input type="checkbox" id="regexGlobal" checked>
+              Global (g)
+            </label>
+            <label class="tool-checkbox">
+              <input type="checkbox" id="regexMulti">
+              Multiline (m)
+            </label>
+          </div>
+        </div>
+        <div class="tool-body">
+          <div class="regex-pattern-row">
+            <span class="regex-slash">/</span>
+            <input type="text" id="regexPattern" class="regex-input" placeholder="your regex pattern">
+            <span class="regex-slash">/</span>
+            <span id="regexFlags" class="regex-flags">g</span>
+          </div>
+          <textarea id="regexTestString" class="code-input" placeholder="Test string to match against..." spellcheck="false"></textarea>
+          <div id="regexResult" class="regex-result">
+            <div class="regex-empty">
+              <p>Enter a regex pattern and test string to see matches highlighted</p>
+            </div>
+          </div>
+          <div id="regexGroups" class="regex-groups"></div>
+        </div>
+        <div class="tool-footer">
+          <span id="regexMatchCount" class="tool-info">0 matches</span>
+          <button id="btnCopyRegex" class="btn btn-outline">Copy Pattern</button>
+        </div>
+      </div>
+
+      <!-- CSS Preview Tool -->
+      <div id="toolCssPreview" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>CSS Visual Builder</h3>
+          <div class="tool-controls">
+            <select id="cssToolType" class="tool-select">
+              <option value="gradient">Gradient Builder</option>
+              <option value="shadow">Box Shadow</option>
+              <option value="border">Border Radius</option>
+              <option value="filter">CSS Filters</option>
+            </select>
+          </div>
+        </div>
+        <div class="tool-body split-view">
+          <div id="cssControls" class="css-controls">
+            <!-- Gradient controls -->
+            <div id="ctrlGradient" class="css-ctrl-group active">
+              <label>Type</label>
+              <select id="gradType" class="tool-select">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+                <option value="conic">Conic</option>
+              </select>
+              <label>Angle: <span id="gradAngleVal">135</span>deg</label>
+              <input type="range" id="gradAngle" min="0" max="360" value="135" class="setting-range">
+              <label>Color 1</label>
+              <div class="color-row">
+                <input type="color" id="gradColor1" value="#6366f1" class="color-input">
+                <input type="text" id="gradColor1Text" value="#6366f1" class="color-text">
+              </div>
+              <label>Color 2</label>
+              <div class="color-row">
+                <input type="color" id="gradColor2" value="#06b6d4" class="color-input">
+                <input type="text" id="gradColor2Text" value="#06b6d4" class="color-text">
+              </div>
+              <label>Color 3</label>
+              <div class="color-row">
+                <input type="color" id="gradColor3" value="#f59e0b" class="color-input">
+                <input type="text" id="gradColor3Text" value="#f59e0b" class="color-text">
+              </div>
+            </div>
+            <!-- Shadow controls -->
+            <div id="ctrlShadow" class="css-ctrl-group hidden">
+              <label>Offset X: <span id="shadowXVal">4</span>px</label>
+              <input type="range" id="shadowX" min="-50" max="50" value="4" class="setting-range">
+              <label>Offset Y: <span id="shadowYVal">6</span>px</label>
+              <input type="range" id="shadowY" min="-50" max="50" value="6" class="setting-range">
+              <label>Blur: <span id="shadowBlurVal">20</span>px</label>
+              <input type="range" id="shadowBlur" min="0" max="100" value="20" class="setting-range">
+              <label>Spread: <span id="shadowSpreadVal">0</span>px</label>
+              <input type="range" id="shadowSpread" min="-50" max="50" value="0" class="setting-range">
+              <label>Color</label>
+              <div class="color-row">
+                <input type="color" id="shadowColor" value="#000000" class="color-input">
+                <input type="text" id="shadowColorText" value="rgba(0,0,0,0.3)" class="color-text">
+              </div>
+            </div>
+            <!-- Border radius controls -->
+            <div id="ctrlBorder" class="css-ctrl-group hidden">
+              <label>Radius: <span id="borderRadiusVal">12</span>px</label>
+              <input type="range" id="borderRadius" min="0" max="200" value="12" class="setting-range">
+              <label class="tool-checkbox">
+                <input type="checkbox" id="borderPill"> Make Pill Shape
+              </label>
+              <label class="tool-checkbox">
+                <input type="checkbox" id="borderCircle"> Make Circle
+              </label>
+            </div>
+            <!-- Filter controls -->
+            <div id="ctrlFilter" class="css-ctrl-group hidden">
+              <label>Blur: <span id="filterBlurVal">0</span>px</label>
+              <input type="range" id="filterBlur" min="0" max="20" value="0" class="setting-range">
+              <label>Brightness: <span id="filterBrightVal">100</span>%</label>
+              <input type="range" id="filterBright" min="0" max="200" value="100" class="setting-range">
+              <label>Contrast: <span id="filterContrastVal">100</span>%</label>
+              <input type="range" id="filterContrast" min="0" max="200" value="100" class="setting-range">
+              <label>Saturate: <span id="filterSaturateVal">100</span>%</label>
+              <input type="range" id="filterSaturate" min="0" max="200" value="100" class="setting-range">
+              <label>Hue Rotate: <span id="filterHueVal">0</span>deg</label>
+              <input type="range" id="filterHue" min="0" max="360" value="0" class="setting-range">
+            </div>
+          </div>
+          <div class="css-preview-area">
+            <div id="cssPreviewBox" class="css-preview-box"></div>
+            <div id="cssOutput" class="css-output"></div>
+            <button id="btnCopyCSS" class="btn btn-outline">Copy CSS</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Diff Tool -->
+      <div id="toolVisualDiff" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>Before / After Comparison</h3>
+          <div class="tool-controls">
+            <button id="btnLoadDiffBefore" class="btn btn-sm btn-outline">Load Before</button>
+            <button id="btnLoadDiffAfter" class="btn btn-sm btn-outline">Load After</button>
+          </div>
+        </div>
+        <div class="tool-body">
+          <div id="diffContainer" class="diff-container">
+            <div id="diffBefore" class="diff-panel">
+              <div class="diff-placeholder">
+                <p>Load "Before" image</p>
+              </div>
+            </div>
+            <div id="diffAfter" class="diff-panel">
+              <div class="diff-placeholder">
+                <p>Load "After" image</p>
+              </div>
+            </div>
+            <div id="diffSlider" class="diff-slider">
+              <div id="diffHandle" class="diff-handle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l-5 7 5 7M16 5l5 7-5 7"/></svg>
+              </div>
+            </div>
+          </div>
+          <input type="file" id="diffFileBefore" accept="image/*" style="display:none">
+          <input type="file" id="diffFileAfter" accept="image/*" style="display:none">
+        </div>
+        <div class="tool-footer">
+          <span id="diffInfo" class="tool-info">Load two images to compare</span>
+          <button id="btnExportDiff" class="btn btn-outline">Export Comparison</button>
+        </div>
+      </div>
+
+      <!-- Tree Diagram Tool -->
+      <div id="toolTreeDiagram" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>Text-to-Tree Diagram</h3>
+          <div class="tool-controls">
+            <select id="treeStyle" class="tool-select">
+              <option value="horizontal">Horizontal</option>
+              <option value="vertical">Vertical</option>
+              <option value="mindmap">Mind Map</option>
+            </select>
+            <button id="btnRenderTree" class="btn btn-sm btn-approve">Render</button>
+          </div>
+        </div>
+        <div class="tool-body split-view">
+          <textarea id="treeInput" class="code-input" placeholder="project/
+  src/
+    components/
+      Button.tsx
+      Header.tsx
+    utils/
+      helpers.ts
+  package.json" spellcheck="false"></textarea>
+          <div id="treeOutput" class="tree-output">
+            <div class="tree-empty">
+              <p>Enter a file tree structure (indentation-based) and click Render</p>
+            </div>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <button id="btnCopyTreePNG" class="btn btn-outline">Copy as Image</button>
+          <button id="btnDownloadTreePNG" class="btn btn-outline">Download PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- GALLERY PANEL -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="galleryPanel" class="panel gallery-panel hidden">
       <div class="gallery-header">
         <h2>Screenshots</h2>
         <div class="gallery-actions">
-          <input type="text" id="gallerySearch" class="search-input" placeholder="Search screenshots...">
+          <input type="text" id="gallerySearch" class="search-input" placeholder="Search...">
           <button id="btnRefresh" class="btn btn-sm">Refresh</button>
         </div>
       </div>
       <div id="galleryGrid" class="gallery-grid">
         <div class="gallery-empty">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <p>No screenshots yet</p>
-          <p class="hint">Use the CLI to render diagrams or capture screens</p>
+          <p class="hint">Use CLI or AI agent to send content for review</p>
         </div>
       </div>
     </div>
 
-    <!-- Settings Modal -->
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SETTINGS MODAL -->
+    <!-- ═══════════════════════════════════════════ -->
     <div id="settingsModal" class="modal hidden">
       <div class="modal-backdrop" id="settingsBackdrop"></div>
       <div class="modal-content">
         <div class="modal-header">
           <h2>Settings</h2>
           <button id="btnCloseSettings" class="btn btn-icon btn-close">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
         <div class="modal-body">
           <div class="setting-group">
             <h3>Appearance</h3>
             <div class="setting-row">
-              <label for="themeSelect">Theme</label>
+              <label>Theme</label>
               <select id="themeSelect" class="setting-select">
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
@@ -146,41 +488,79 @@
           <div class="setting-group">
             <h3>Annotation Colors</h3>
             <div class="setting-row">
-              <label for="colorRect">Rectangle</label>
+              <label>Rectangle</label>
               <input type="color" id="colorRect" class="color-input" value="#6366f1">
             </div>
             <div class="setting-row">
-              <label for="colorArrow">Arrow</label>
+              <label>Arrow</label>
               <input type="color" id="colorArrow" class="color-input" value="#ef4444">
             </div>
             <div class="setting-row">
-              <label for="colorText">Text</label>
+              <label>Text</label>
               <input type="color" id="colorText" class="color-input" value="#f1f5f9">
             </div>
           </div>
           <div class="setting-group">
             <h3>Capture</h3>
             <div class="setting-row">
-              <label for="hotkeyInput">Global Hotkey</label>
-              <input type="text" id="hotkeyInput" class="setting-input" value="Ctrl+Shift+S" placeholder="e.g. Ctrl+Shift+S">
+              <label>Global Hotkey</label>
+              <input type="text" id="hotkeyInput" class="setting-input" value="Ctrl+Shift+S">
             </div>
             <div class="setting-row">
-              <label for="qualityRange">Screenshot Quality</label>
+              <label>Quality</label>
               <input type="range" id="qualityRange" class="setting-range" min="50" max="100" value="92">
               <span id="qualityValue">92%</span>
             </div>
           </div>
+          <div class="setting-group">
+            <h3>Code Screenshots</h3>
+            <div class="setting-row">
+              <label>Default Theme</label>
+              <select id="defaultCodeTheme" class="setting-select">
+                <option value="github-dark">GitHub Dark</option>
+                <option value="one-dark">One Dark</option>
+                <option value="dracula">Dracula</option>
+                <option value="monokai">Monokai</option>
+                <option value="nord">Nord</option>
+                <option value="material">Material</option>
+                <option value="tokyo-night">Tokyo Night</option>
+                <option value="catppuccin">Catppuccin</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label>Padding</label>
+              <input type="range" id="codePadding" class="setting-range" min="20" max="80" value="48">
+              <span id="codePaddingVal">48px</span>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button id="btnSaveSettings" class="btn btn-approve">Save Settings</button>
+          <button id="btnSaveSettings" class="btn btn-approve">Save</button>
           <button id="btnCancelSettings" class="btn btn-changes">Cancel</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <script src="https://unpkg.com/fabric@6.5.3/dist/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/typescript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/xml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/css.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/json.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/sql.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/rust.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/go.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/java.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/cpp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/csharp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/markdown.min.js"></script>
   <script src="index.js"></script>
 </body>
 </html>

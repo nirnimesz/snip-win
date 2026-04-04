@@ -1,6 +1,6 @@
 {
   "name": "snip-win",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Visual communication layer between humans and AI agents — Windows native",
   "main": "src/main/index.js",
   "bin": {
