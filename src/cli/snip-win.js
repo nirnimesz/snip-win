@@ -70,7 +70,7 @@ async function main() {
   const command = args[0];
 
   if (!command || command === '--help' || command === '-h') {
-    console.log(`SnipWin CLI — Visual Review for AI Agents (Windows)
+    console.log(`SnipWin CLI v2.0 — Visual Review for AI Agents (Windows)
 
 Commands:
   search <query>        Search screenshots by description
@@ -78,10 +78,15 @@ Commands:
   get <filepath>        Get metadata for a specific screenshot
   open <filepath>       Open image for annotation/review (blocks until done)
   render --format <fmt> Render content from stdin (mermaid or html)
+  capture [--type screen|window]  Capture screen or active window
+  transcribe <filepath> Extract text from image via OCR
+  categories            List screenshot categories
+  settings [--get|--set key=value]  Get or set app settings
 
 Options:
   --format <fmt>        Render format: mermaid or html
   --message <text>      Context message shown during review
+  --type <type>         Capture type: screen (default) or window
   --pretty              Pretty-print JSON output
   --help, -h            Show this help
 
@@ -91,6 +96,9 @@ Examples:
   snip-win open screenshot.png --message "Does this look right?"
   echo "graph TD; A-->B" | snip-win render --format mermaid
   echo "<h1>Hello</h1>" | snip-win render --format html --message "Preview"
+  snip-win capture --type screen
+  snip-win transcribe screenshot.png
+  snip-win settings --get
 `);
     process.exit(0);
   }
@@ -164,6 +172,51 @@ Examples:
         }
         const result = await sendToPipe({ type: 'render', format, content, message });
         output(result);
+        break;
+      }
+
+      case 'capture': {
+        const typeIdx = args.indexOf('--type');
+        const type = typeIdx >= 0 ? args[typeIdx + 1] : 'screen';
+        const result = await sendToPipe({ type: 'capture', type });
+        output(result);
+        break;
+      }
+
+      case 'transcribe': {
+        const filepath = args[1];
+        if (!filepath) {
+          console.error('Usage: snip-win transcribe <filepath>');
+          process.exit(1);
+        }
+        if (!fs.existsSync(filepath)) {
+          console.error(`File not found: ${filepath}`);
+          process.exit(1);
+        }
+        const result = await sendToPipe({ type: 'transcribe', filepath });
+        output(result);
+        break;
+      }
+
+      case 'settings': {
+        const action = args[1];
+        if (action === '--get') {
+          const result = await sendToPipe({ type: 'settings', action: 'get' });
+          output(result.data);
+        } else if (action === '--set') {
+          const pair = args[2];
+          if (!pair || !pair.includes('=')) {
+            console.error('Usage: snip-win settings --set key=value');
+            process.exit(1);
+          }
+          const [key, ...valParts] = pair.split('=');
+          const data = { [key]: valParts.join('=') };
+          const result = await sendToPipe({ type: 'settings', action: 'set', data });
+          output(result.data);
+        } else {
+          console.error('Usage: snip-win settings --get | --set key=value');
+          process.exit(1);
+        }
         break;
       }
 

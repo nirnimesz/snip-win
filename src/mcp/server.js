@@ -138,6 +138,28 @@ const TOOLS = [
       },
       required: ['query']
     }
+  },
+  {
+    name: 'capture_screen',
+    description: 'Capture the full screen or active window. Returns the saved screenshot path.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        type: { type: 'string', enum: ['screen', 'window'], description: 'Capture type (default: screen)' },
+        description: { type: 'string', description: 'Optional description for the screenshot' }
+      }
+    }
+  },
+  {
+    name: 'transcribe_image',
+    description: 'Extract text from an image using OCR (Tesseract).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        filepath: { type: 'string', description: 'Path to the image file' }
+      },
+      required: ['filepath']
+    }
   }
 ];
 
@@ -224,6 +246,39 @@ async function handleToolCall(name, args) {
       };
     }
 
+    case 'capture_screen': {
+      const result = await sendToPipe({
+        type: 'capture',
+        type: args.type || 'screen',
+        description: args.description || ''
+      });
+      if (result.error) {
+        return { content: [{ type: 'text', text: `Error: ${result.error}` }], isError: true };
+      }
+      return {
+        content: [{
+          type: 'text',
+          text: `Screenshot captured:\nPath: ${result.data.path}\nName: ${result.data.name}`
+        }]
+      };
+    }
+
+    case 'transcribe_image': {
+      if (!fs.existsSync(args.filepath)) {
+        return {
+          content: [{ type: 'text', text: `Error: File not found: ${args.filepath}` }],
+          isError: true
+        };
+      }
+      const result = await sendToPipe({ type: 'transcribe', filepath: args.filepath });
+      if (result.error) {
+        return { content: [{ type: 'text', text: `Error: ${result.error}` }], isError: true };
+      }
+      return {
+        content: [{ type: 'text', text: result.text || 'No text found in image.' }]
+      };
+    }
+
     default:
       return {
         content: [{ type: 'text', text: `Unknown tool: ${name}` }],
@@ -245,7 +300,7 @@ async function handleMessage(msg) {
         },
         serverInfo: {
           name: 'snip-win',
-          version: '1.0.0'
+          version: '2.0.0'
         }
       });
       break;
