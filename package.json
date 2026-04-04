@@ -1,6 +1,6 @@
 {
   "name": "snip-win",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Visual communication layer between humans and AI agents — Windows native",
   "main": "src/main/index.js",
   "bin": {
@@ -13,13 +13,18 @@
     "build:portable": "electron-builder --win portable",
     "test": "node --test tests/"
   },
-  "keywords": ["mcp", "electron", "windows", "ai", "review", "annotation"],
+  "keywords": ["mcp", "electron", "windows", "ai", "review", "annotation", "screenshot", "mermaid"],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nirnimesz/snip-win"
+  },
   "dependencies": {
     "fabric": "^6.5.3",
     "mermaid": "^11.4.1",
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
     "electron": "^33.4.11",

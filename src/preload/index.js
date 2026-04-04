@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('snipAPI', {
-  // Receive render requests from main process
+  // ── Receive events from main process ──
   onRenderRequest: (callback) => {
     ipcRenderer.on('render-request', (event, data) => callback(data));
   },
@@ -11,8 +11,11 @@ contextBridge.exposeInMainWorld('snipAPI', {
   onCaptureScreen: (callback) => {
     ipcRenderer.on('capture-screen', (event) => callback());
   },
+  onSettingsOpen: (callback) => {
+    ipcRenderer.on('open-settings', (event) => callback());
+  },
 
-  // Send review results back to main process
+  // ── Send review results ──
   submitReview: (result) => {
     ipcRenderer.send('review-complete', result);
   },
@@ -20,8 +23,19 @@ contextBridge.exposeInMainWorld('snipAPI', {
     ipcRenderer.send('review-cancel');
   },
 
-  // Save screenshots
+  // ── Screen capture ──
+  captureScreen: (type) => {
+    return ipcRenderer.invoke('capture-screen', { type });
+  },
   saveScreenshot: (imageData, metadata) => {
     return ipcRenderer.invoke('save-screenshot', imageData, metadata);
+  },
+
+  // ── Settings ──
+  getSettings: () => {
+    return ipcRenderer.invoke('get-settings');
+  },
+  saveSettings: (newSettings) => {
+    return ipcRenderer.invoke('save-settings', newSettings);
   }
 });
