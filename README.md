@@ -1,70 +1,103 @@
 # SnipWin
 
-> **Visual communication layer between humans and AI agents — Windows Native**
+> **Visual communication layer between humans and AI agents**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Electron](https://img.shields.io/badge/Electron-33-47848F.svg)](https://www.electronjs.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/nirnimesz/snip-win)
+[![Version](https://img.shields.io/github/package-json/v/nirnimesz/snip-win)](https://github.com/nirnimesz/snip-win)
 [![GitHub Stars](https://img.shields.io/github/stars/nirnimesz/snip-win?style=social)](https://github.com/nirnimesz/snip-win)
 
-AI agents generate visuals — Mermaid diagrams, HTML layouts, UI components. SnipWin bridges the gap: the agent renders something, it pops up on your screen, you review and annotate, and structured feedback returns to the agent.
+AI agents generate visuals — Mermaid diagrams, code screenshots, JSON trees, regex patterns. SnipWin bridges the gap: the agent renders something, it pops up on your screen, you review and annotate, and structured feedback returns to the agent.
+
+**16 developer tools in one app. No more opening 10 different websites.**
 
 ---
 
 ## 🚀 Quick Install
 
-### Option 1: One-Liner (Recommended)
+### Windows
 
+**PowerShell One-Liner:**
 ```powershell
 irm https://raw.githubusercontent.com/nirnimesz/snip-win/main/scripts/install.ps1 | iex
 ```
 
-### Option 2: npm Global
+### Linux / macOS
 
-```powershell
-npm install -g nirnimesz/snip-win
+**Bash One-Liner:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/nirnimesz/snip-win/main/scripts/install.sh | bash
 ```
 
-### Option 3: From Source
+### From Source (All Platforms)
 
-```powershell
+```bash
 git clone https://github.com/nirnimesz/snip-win.git
 cd snip-win
 npm install
 npm start
 ```
 
+### Global Install (Optional)
+
+```bash
+npm install -g git+https://github.com/nirnimesz/snip-win.git
+```
+
+> **Note:** Use `git+https://` prefix to avoid SSH key issues.
+
 ---
 
 ## ✨ Features
 
+### Visual Review (AI Agent Integration)
 | Feature | Description |
 |---------|-------------|
 | 🎨 **Mermaid Diagrams** | Render flowcharts, sequence diagrams, architecture diagrams |
-| 🌐 **HTML Preview** | Preview HTML layouts, email templates, UI components in sandboxed iframe |
+| 🌐 **HTML Preview** | Preview HTML layouts in sandboxed iframe |
 | 🖼️ **Image Review** | Open any image for annotation and review |
-| ✏️ **Fabric.js Annotations** | Rectangle, arrow, text, blur, freehand drawing tools |
-| 📸 **Screen Capture** | Capture full screen or active window directly |
-| 🔤 **OCR Text Extraction** | Extract text from images via Tesseract.js |
-| 🌗 **Dark/Light Themes** | Smooth theme transitions with customizable annotation colors |
+| ✏️ **Fabric.js Annotations** | Rectangle, arrow, text, blur, freehand drawing |
+| 📸 **Screen Capture** | Capture full screen or active window |
 | 📁 **Screenshot Library** | Auto-save and organize all reviewed visuals |
-| 🔧 **Settings Panel** | Configure theme, colors, hotkeys, and screenshot quality |
-| 🪟 **Windows System Tray** | Always accessible from the taskbar with quick actions |
-| 🔌 **MCP Server** | Model Context Protocol support for 6+ AI tools |
-| ⌨️ **Keyboard Shortcuts** | Global hotkey for screen capture, annotation shortcuts |
+| 🔌 **MCP Server** | Model Context Protocol for 6+ AI tools |
+
+### Developer Tools
+| Tool | What It Replaces |
+|------|-----------------|
+| 💻 **Code Screenshots** | carbon.now.sh — 8 themes, 15+ languages, window frames |
+| 🌳 **JSON Tree Viewer** | JSON formatter sites — collapsible, color-coded |
+| 🔍 **Regex Tester** | regex101 — real-time highlighting, capture groups |
+| 🎨 **CSS Visual Builder** | CSS generators — gradients, shadows, filters, border-radius |
+| 🔐 **JWT Decoder** | jwt.io — decode tokens locally, check expiry |
+| 🔢 **Hash Generator** | Online hash tools — SHA-1/256/384/512, all at once |
+| 🆔 **UUID Generator** | uuidgenerator.net — bulk generation, uppercase/no-dash |
+| ⏰ **Timestamp Converter** | epochconverter.com — live clock, Unix ↔ ISO ↔ relative |
+| ⏱️ **Cron Parser** | crontab.guru — visual breakdown, next 5 runs |
+| 🔤 **Base64 Converter** | base64encode.org — encode/decode with swap |
+| 📋 **YAML ↔ JSON** | Online converters — bidirectional |
+| 📝 **Markdown Preview** | Markdown editors — live MD → HTML rendering |
+| 🎨 **Color Extractor** | Image color pickers — extract palette from any image |
+| 📊 **Tree Diagram** | File tree generators — text-to-tree renderer |
+| 🔀 **Visual Diff** | Diff checkers — before/after comparison slider |
+| 📤 **Export Options** | PNG, SVG, clipboard, base64 — one-click export |
 
 ---
 
 ## 📸 Screenshots
 
-### Review Panel
-The agent renders a Mermaid diagram → it pops up on your screen → you annotate and approve.
+### Code Screenshot (Carbon-style)
+Paste code → choose theme → copy as image. Supports 8 themes and 15+ languages.
 
-### Annotation Tools
-Rectangle highlights, arrows, text labels, blur regions, and freehand drawing — powered by Fabric.js.
+### JSON Tree Viewer
+Paste JSON → interactive collapsible tree with color-coded types.
 
-### Screen Capture
-One-click capture of full screen or active window, copied to clipboard and saved automatically.
+### Regex Tester
+Type pattern → real-time match highlighting with capture group display.
+
+### JWT Decoder
+Paste token → instant decode with expiry check and claim inspection.
 
 ---
 
@@ -85,7 +118,7 @@ SnipWin works with all major AI coding assistants via MCP (Model Context Protoco
 
 ### Quick Setup
 
-```powershell
+```bash
 node scripts/setup.js
 ```
 
@@ -100,7 +133,7 @@ This detects your installed AI tools and automatically configures the MCP server
   "mcp": {
     "snip-win": {
       "type": "local",
-      "command": ["node", "C:\\Users\\<YOU>\\Documents\\snip-win\\src\\mcp\\server.js"],
+      "command": ["node", "/path/to/snip-win/src/mcp/server.js"],
       "enabled": true
     }
   }
@@ -113,7 +146,7 @@ This detects your installed AI tools and automatically configures the MCP server
   "mcpServers": {
     "snip-win": {
       "command": "node",
-      "args": ["C:\\Users\\<YOU>\\Documents\\snip-win\\src\\mcp\\server.js"]
+      "args": ["/path/to/snip-win/src/mcp/server.js"]
     }
   }
 }
@@ -125,7 +158,7 @@ This detects your installed AI tools and automatically configures the MCP server
   "mcpServers": {
     "snip-win": {
       "command": "node",
-      "args": ["C:\\Users\\<YOU>\\Documents\\snip-win\\src\\mcp\\server.js"]
+      "args": ["/path/to/snip-win/src/mcp/server.js"]
     }
   }
 }
@@ -137,7 +170,7 @@ This detects your installed AI tools and automatically configures the MCP server
   "mcpServers": {
     "snip-win": {
       "command": "node",
-      "args": ["C:\\Users\\<YOU>\\Documents\\snip-win\\src\\mcp\\server.js"]
+      "args": ["/path/to/snip-win/src/mcp/server.js"]
     }
   }
 }
@@ -149,7 +182,7 @@ This detects your installed AI tools and automatically configures the MCP server
 
 ### Start the App
 
-```powershell
+```bash
 npm start
 ```
 
@@ -157,7 +190,7 @@ SnipWin runs in the system tray. Click the tray icon to open the review panel.
 
 ### CLI Commands
 
-```powershell
+```bash
 # Render a Mermaid diagram
 echo "graph TD; A[Client] --> B[API] --> C[Database]" | node src/cli/snip-win.js render --format mermaid --message "Architecture review"
 
@@ -213,6 +246,8 @@ Preview this HTML email template and let me know if the layout looks correct.
 Capture the current screen and open it for annotation.
 
 Extract the text from this error screenshot.
+
+Generate a code screenshot of this function with the Dracula theme.
 ```
 
 ---
@@ -246,24 +281,27 @@ Extract the text from this error screenshot.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      SnipWin v2.0                       │
+│                      SnipWin v4.0                       │
 ├──────────────┐  Named Pipe  ┌───────────────────────────┤
 │   CLI        │◄────────────►│  Electron Main Process     │
-│   (Node.js)  │  \\.\pipe\   │  • desktopCapturer         │
-│              │   snip-win   │  • globalShortcut          │
-│   MCP Server │◄────────────►│  • Tesseract OCR           │
-│   (stdio)    │              │  • Settings store          │
-└──────────────┘              │  • Named Pipe IPC          │
+│   (Node.js)  │  \\.\pipe\   │  (Windows)                 │
+│              │   snip-win   │  Unix Domain Socket        │
+│   MCP Server │◄────────────►│  (Linux/macOS)             │
+│   (stdio)    │              │  • desktopCapturer         │
+└──────────────┘              │  • globalShortcut          │
+                              │  • Tesseract OCR           │
+                              │  • Settings store          │
                               └───────────┬───────────────┘
                                           │ IPC
                               ┌───────────┴───────────────┐
                               │  Renderer Process          │
                               │  • Fabric.js annotations   │
                               │  • Mermaid.js diagrams     │
+                              │  • Highlight.js code       │
                               │  • HTML sandboxed preview  │
+                              │  • 16 developer tools      │
                               │  • Theme switching         │
                               │  • Tab navigation          │
-                              │  • Settings modal          │
                               └───────────────────────────┘
 ```
 
@@ -276,8 +314,10 @@ Extract the text from this error screenshot.
 | **Electron 33** | Cross-platform desktop app framework |
 | **Fabric.js 6** | Professional canvas annotation library |
 | **Mermaid.js 11** | Diagram rendering from text |
+| **Highlight.js 11** | Code syntax highlighting (15+ languages) |
 | **Tesseract.js 5** | OCR text extraction |
-| **Windows Named Pipes** | Fast, native IPC (replaces Unix sockets) |
+| **Web Crypto API** | Hash generation (no external deps) |
+| **Named Pipes / Unix Sockets** | Fast, native IPC |
 | **MCP Protocol** | AI agent integration standard |
 
 ---
@@ -293,16 +333,18 @@ snip-win/
 │   │   └── index.js          # Secure context bridge
 │   ├── renderer/
 │   │   ├── index.html        # Review panel UI
-│   │   ├── index.js          # Fabric.js + UI logic
+│   │   ├── index.js          # Core renderer logic
+│   │   ├── v4-tools.js       # Developer tools logic
 │   │   └── styles.css        # Glass morphism styling
 │   ├── cli/
-│   │   └── snip-win.js       # Windows CLI
+│   │   └── snip-win.js       # CLI (Windows/Linux/macOS)
 │   └── mcp/
 │       └── server.js         # MCP server for AI agents
 ├── scripts/
-│   ├── install.ps1           # One-line installer
+│   ├── install.ps1           # Windows one-liner installer
+│   ├── install.sh            # Linux/macOS one-liner installer
 │   └── setup.js              # AI CLI configuration wizard
-├── config-templates/         # Config templates for each AI tool
+├── config-templates/         # MCP configs for each AI tool
 │   ├── opencode.json
 │   ├── codex.json
 │   ├── claude.json
@@ -319,11 +361,17 @@ snip-win/
 
 ## 📦 Build Installer
 
-```powershell
+### Windows (NSIS)
+```bash
 npm run build
 ```
+Creates installer in `dist/`.
 
-This creates an NSIS installer and portable executable in `dist/`.
+### Linux (AppImage)
+Coming soon — track [#1](https://github.com/nirnimesz/snip-win/issues/1).
+
+### macOS (DMG)
+Coming soon — track [#2](https://github.com/nirnimesz/snip-win/issues/2).
 
 ---
 
