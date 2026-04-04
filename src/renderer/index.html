@@ -158,6 +158,42 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="16" y="2" width="6" height="6" rx="1"/><rect x="9" y="16" width="6" height="6" rx="1"/><path d="M5 8v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M12 13v3"/></svg>
           Tree
         </button>
+        <button class="tool-tab" data-tool-tab="jwt-decoder">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          JWT
+        </button>
+        <button class="tool-tab" data-tool-tab="hash-gen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3l-2 18M16 3l-2 18"/></svg>
+          Hash
+        </button>
+        <button class="tool-tab" data-tool-tab="uuid-gen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 7h3a5 5 0 0 1 0 10h-3m-6 0H6A5 5 0 0 1 6 7h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          UUID
+        </button>
+        <button class="tool-tab" data-tool-tab="timestamp">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Time
+        </button>
+        <button class="tool-tab" data-tool-tab="cron-parser">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Cron
+        </button>
+        <button class="tool-tab" data-tool-tab="base64">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          Base64
+        </button>
+        <button class="tool-tab" data-tool-tab="yaml-json">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+          YAML
+        </button>
+        <button class="tool-tab" data-tool-tab="markdown">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          MD
+        </button>
+        <button class="tool-tab" data-tool-tab="color-picker">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          Colors
+        </button>
       </div>
 
       <!-- Code Snippet Tool -->
@@ -539,8 +575,231 @@
           <button id="btnCancelSettings" class="btn btn-changes">Cancel</button>
         </div>
       </div>
+      </div>
+
+      <!-- JWT Decoder -->
+      <div id="toolJwtDecoder" class="tool-content hidden">
+        <div class="tool-header"><h3>JWT Decoder / Inspector</h3></div>
+        <div class="tool-body">
+          <textarea id="jwtInput" class="code-input" placeholder="Paste your JWT token here (eyJ...)" spellcheck="false" style="min-height:80px"></textarea>
+          <div class="tool-body split-view" style="padding:0;border:none">
+            <div>
+              <h4 style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px">HEADER</h4>
+              <pre id="jwtHeader" class="jwt-output">Paste a JWT to decode</pre>
+              <h4 style="font-size:0.75rem;color:var(--text-muted);margin:12px 0 8px">PAYLOAD</h4>
+              <pre id="jwtPayload" class="jwt-output">—</pre>
+            </div>
+            <div>
+              <h4 style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px">INFO</h4>
+              <div id="jwtInfo" class="jwt-info-panel">
+                <div class="jwt-info-row"><span>Algorithm</span><span id="jwtAlg">—</span></div>
+                <div class="jwt-info-row"><span>Type</span><span id="jwtType">—</span></div>
+                <div class="jwt-info-row"><span>Issued At</span><span id="jwtIat">—</span></div>
+                <div class="jwt-info-row"><span>Expires At</span><span id="jwtExp">—</span></div>
+                <div class="jwt-info-row"><span>Issuer</span><span id="jwtIss">—</span></div>
+                <div class="jwt-info-row"><span>Subject</span><span id="jwtSub">—</span></div>
+                <div class="jwt-info-row"><span>Status</span><span id="jwtStatus">—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <span class="tool-info">Decodes locally — no data sent to any server</span>
+          <button id="btnCopyJwtPayload" class="btn btn-outline">Copy Payload</button>
+        </div>
+      </div>
+
+      <!-- Hash Generator -->
+      <div id="toolHashGen" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>Hash Generator</h3>
+          <div class="tool-controls">
+            <select id="hashAlgo" class="tool-select">
+              <option value="SHA-256">SHA-256</option>
+              <option value="SHA-1">SHA-1</option>
+              <option value="SHA-384">SHA-384</option>
+              <option value="SHA-512">SHA-512</option>
+            </select>
+          </div>
+        </div>
+        <div class="tool-body">
+          <textarea id="hashInput" class="code-input" placeholder="Enter text to hash..." spellcheck="false"></textarea>
+          <div class="hash-output-row">
+            <input type="text" id="hashOutput" class="hash-output-input" readonly placeholder="Hash will appear here...">
+            <button id="btnCopyHash" class="btn btn-sm btn-outline">Copy</button>
+          </div>
+          <div id="hashAllOutputs" class="hash-all-outputs"></div>
+        </div>
+      </div>
+
+      <!-- UUID Generator -->
+      <div id="toolUuidGen" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>UUID Generator</h3>
+          <div class="tool-controls">
+            <label class="tool-checkbox"><input type="checkbox" id="uuidUpper"> UPPERCASE</label>
+            <label class="tool-checkbox"><input type="checkbox" id="uuidNoDash"> No Dashes</label>
+            <label>Count: <input type="number" id="uuidCount" value="1" min="1" max="100" class="tool-input-num"></label>
+            <button id="btnGenerateUuid" class="btn btn-sm btn-approve">Generate</button>
+          </div>
+        </div>
+        <div class="tool-body">
+          <div id="uuidOutput" class="uuid-output">
+            <div class="uuid-empty">Click Generate to create UUIDs</div>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <span class="tool-info">UUID v4 (random)</span>
+          <button id="btnCopyAllUuid" class="btn btn-outline">Copy All</button>
+        </div>
+      </div>
+
+      <!-- Timestamp Converter -->
+      <div id="toolTimestamp" class="tool-content hidden">
+        <div class="tool-header"><h3>Timestamp Converter</h3></div>
+        <div class="tool-body">
+          <div class="timestamp-now">
+            <div class="timestamp-card">
+              <label>Current Unix Timestamp</label>
+              <div id="tsNow" class="ts-value">0</div>
+              <button id="btnCopyTsNow" class="btn btn-sm btn-outline">Copy</button>
+            </div>
+            <div class="timestamp-card">
+              <label>Current Local Time</label>
+              <div id="tsNowLocal" class="ts-value">—</div>
+            </div>
+            <div class="timestamp-card">
+              <label>Current UTC</label>
+              <div id="tsNowUtc" class="ts-value">—</div>
+            </div>
+          </div>
+          <div class="ts-converter">
+            <h4 style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px">Convert</h4>
+            <div class="ts-row">
+              <input type="text" id="tsInput" class="tool-input-wide" placeholder="Enter Unix timestamp or date string...">
+              <button id="btnConvertTs" class="btn btn-sm btn-approve">Convert</button>
+            </div>
+            <div id="tsResult" class="ts-result hidden">
+              <div class="ts-result-row"><span>Unix (seconds)</span><span id="tsResultSec">—</span></div>
+              <div class="ts-result-row"><span>Unix (milliseconds)</span><span id="tsResultMs">—</span></div>
+              <div class="ts-result-row"><span>ISO 8601</span><span id="tsResultIso">—</span></div>
+              <div class="ts-result-row"><span>Local</span><span id="tsResultLocal">—</span></div>
+              <div class="ts-result-row"><span>Relative</span><span id="tsResultRelative">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cron Parser -->
+      <div id="toolCronParser" class="tool-content hidden">
+        <div class="tool-header"><h3>Cron Expression Visualizer</h3></div>
+        <div class="tool-body">
+          <div class="cron-input-row">
+            <input type="text" id="cronInput" class="cron-input" placeholder="*/5 * * * *" value="*/5 * * * *">
+            <button id="btnParseCron" class="btn btn-sm btn-approve">Parse</button>
+          </div>
+          <div id="cronResult" class="cron-result">
+            <div class="cron-fields">
+              <div class="cron-field"><label>Minute</label><span id="cronMin">*/5</span></div>
+              <div class="cron-field"><label>Hour</label><span id="cronHour">*</span></div>
+              <div class="cron-field"><label>Day</label><span id="cronDay">*</span></div>
+              <div class="cron-field"><label>Month</label><span id="cronMonth">*</span></div>
+              <div class="cron-field"><label>Weekday</label><span id="cronWeekday">*</span></div>
+            </div>
+            <div id="cronDescription" class="cron-description">Every 5 minutes</div>
+            <div id="cronNextRuns" class="cron-next-runs"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Base64 Converter -->
+      <div id="toolBase64" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>Base64 Encode / Decode</h3>
+          <div class="tool-controls">
+            <button id="btnBase64Encode" class="btn btn-sm btn-approve">Encode →</button>
+            <button id="btnBase64Decode" class="btn btn-sm btn-outline">← Decode</button>
+            <button id="btnBase64Swap" class="btn btn-sm btn-outline">⇄ Swap</button>
+          </div>
+        </div>
+        <div class="tool-body split-view">
+          <div>
+            <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px">Plain Text</label>
+            <textarea id="base64Plain" class="code-input" placeholder="Enter text to encode..." spellcheck="false" style="min-height:200px"></textarea>
+          </div>
+          <div>
+            <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px">Base64</label>
+            <textarea id="base64Encoded" class="code-input" placeholder="Base64 output..." spellcheck="false" style="min-height:200px"></textarea>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <span class="tool-info" id="base64Info">—</span>
+          <button id="btnCopyBase64" class="btn btn-outline">Copy</button>
+        </div>
+      </div>
+
+      <!-- YAML ↔ JSON -->
+      <div id="toolYamlJson" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>YAML ↔ JSON Converter</h3>
+          <div class="tool-controls">
+            <button id="btnYamlToJson" class="btn btn-sm btn-approve">YAML → JSON</button>
+            <button id="btnJsonToYaml" class="btn btn-sm btn-outline">JSON → YAML</button>
+          </div>
+        </div>
+        <div class="tool-body split-view">
+          <div>
+            <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px">YAML</label>
+            <textarea id="yamlInput" class="code-input" placeholder="key: value&#10;list:&#10;  - item1&#10;  - item2" spellcheck="false" style="min-height:250px"></textarea>
+          </div>
+          <div>
+            <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px">JSON</label>
+            <textarea id="jsonOutput" class="code-input" placeholder="JSON output..." spellcheck="false" style="min-height:250px" readonly></textarea>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <span class="tool-info" id="yamlStatus">—</span>
+          <button id="btnCopyYamlJson" class="btn btn-outline">Copy</button>
+        </div>
+      </div>
+
+      <!-- Markdown Preview -->
+      <div id="toolMarkdown" class="tool-content hidden">
+        <div class="tool-header"><h3>Markdown Live Preview</h3></div>
+        <div class="tool-body split-view">
+          <textarea id="mdInput" class="code-input" placeholder="# Hello World&#10;&#10;Write **Markdown** here..." spellcheck="false" style="min-height:400px"></textarea>
+          <div id="mdPreview" class="md-preview">
+            <div class="md-empty">Start typing to see preview</div>
+          </div>
+        </div>
+        <div class="tool-footer">
+          <span class="tool-info">Basic Markdown → HTML</span>
+          <button id="btnCopyMdHtml" class="btn btn-outline">Copy HTML</button>
+        </div>
+      </div>
+
+      <!-- Color Palette Extractor -->
+      <div id="toolColorPicker" class="tool-content hidden">
+        <div class="tool-header">
+          <h3>Color Palette Extractor</h3>
+          <div class="tool-controls">
+            <button id="btnLoadColorImage" class="btn btn-sm btn-outline">Load Image</button>
+            <input type="file" id="colorImageFile" accept="image/*" style="display:none">
+          </div>
+        </div>
+        <div class="tool-body">
+          <div id="colorImageContainer" class="color-image-container">
+            <div class="color-placeholder">Load an image to extract its color palette</div>
+          </div>
+          <div id="colorPalette" class="color-palette"></div>
+          <div id="colorDetails" class="color-details"></div>
+        </div>
+        <div class="tool-footer">
+          <span class="tool-info" id="colorInfo">—</span>
+          <button id="btnCopyPalette" class="btn btn-outline">Copy Palette</button>
+        </div>
+      </div>
     </div>
-  </div>
 
   <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
@@ -562,5 +821,6 @@
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/yaml.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/markdown.min.js"></script>
   <script src="index.js"></script>
+  <script src="v4-tools.js"></script>
 </body>
 </html>
