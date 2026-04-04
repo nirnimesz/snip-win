@@ -1,0 +1,26 @@
+appId: com.snipwin.app
+productName: SnipWin
+directories:
+  output: dist
+win:
+  target:
+    - nsis
+    - portable
+  icon: assets/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  include: build/installer.nsh
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+files:
+  - src/**/*
+  - assets/**/*
+  - package.json
+extraResources:
+  - from: src/cli
+    to: cli
+    filter: ['**/*']
+  - from: src/mcp
+    to: mcp
+    filter: ['**/*']

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+*.sock
+*.pipe
+.DS_Store
+Thumbs.db
+*.log
+screenshots/

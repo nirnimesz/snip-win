@@ -1,0 +1,63 @@
+{
+  "name": "snip-win",
+  "version": "1.0.0",
+  "description": "Visual communication layer between humans and AI agents — Windows native",
+  "main": "src/main/index.js",
+  "bin": {
+    "snip-win": "src/cli/snip-win.js"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "test": "node --test tests/"
+  },
+  "keywords": ["mcp", "electron", "windows", "ai", "review", "annotation"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "fabric": "^6.5.3",
+    "mermaid": "^11.4.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.snipwin.app",
+    "productName": "SnipWin",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "src/cli",
+        "to": "cli",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "src/mcp",
+        "to": "mcp",
+        "filter": ["**/*"]
+      }
+    ]
+  }
+}
