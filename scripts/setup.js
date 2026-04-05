@@ -301,6 +301,36 @@ const AI_TOOLS = [
       fs.writeFileSync(configPath, content);
       return { path: configPath };
     }
+  },
+  {
+    name: 'Antigravity IDE (Built-in Agent)',
+    detect: () => {
+      // Antigravity IDE is a VS Code fork with built-in AI agent
+      const agPaths = [
+        path.join(HOME, 'AppData', 'Local', 'Programs', 'Antigravity'),
+        path.join(HOME, 'AppData', 'Local', 'Programs', 'antigravity'),
+        path.join('C:', 'Program Files', 'Antigravity'),
+        path.join('C:', 'Program Files (x86)', 'Antigravity'),
+      ];
+      const found = agPaths.find(dirExists);
+      if (found) return { method: 'app', path: found };
+      if (dirExists('/Applications/Antigravity.app')) return { method: 'app', path: '/Applications/Antigravity.app' };
+      return null;
+    },
+    configure: () => {
+      // Antigravity uses VS Code's mcp.json format
+      const configPath = path.join(HOME, 'AppData', 'Roaming', 'Antigravity', 'User', 'mcp.json');
+      const config = readJSON(configPath);
+      if (!config.servers) config.servers = {};
+      if (config.servers['snip-win']) return { path: configPath, skipped: true };
+      config.servers['snip-win'] = {
+        type: 'local',
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH]
+      };
+      writeJSON(configPath, config);
+      return { path: configPath };
+    }
   }
 ];
 
