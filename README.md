@@ -103,30 +103,34 @@ Paste token → instant decode with expiry check and claim inspection.
 
 ## 🤖 AI CLI Integrations
 
-SnipWin works with all major AI coding assistants via MCP (Model Context Protocol).
+SnipWin auto-detects and configures MCP for **10 AI tools** during install. No manual setup needed.
 
 ### Supported Tools
 
-| AI Tool | Config File | Status |
-|---------|-------------|--------|
-| **OpenCode** | `opencode.json` or `~/.opencode/config.json` | ✅ |
-| **ChatGPT Codex** | `~/.codex/config.json` | ✅ |
-| **Claude Code** | `~/.claude/settings.json` | ✅ |
-| **Cursor** | `~/.cursor/mcp.json` | ✅ |
-| **Windsurf** | `~/.codeium/windsurf/mcp_config.json` | ✅ |
-| **Cline (VS Code)** | Cline MCP settings | ✅ |
+| AI Tool | Detection Method | Config Format |
+|---------|-----------------|---------------|
+| **OpenCode** | CLI binary or npm global | `~/.opencode/config.json` |
+| **ChatGPT Codex** | CLI binary or npm global | `~/.codex/config.toml` |
+| **Claude Code** | CLI, npm, or claudekit-cli | `~/.claude/settings.json` |
+| **Antigravity IDE** | App installation | `~/AppData/Roaming/Antigravity/User/mcp.json` |
+| **Cursor** | App or CLI binary | `~/.cursor/mcp.json` |
+| **Windsurf (Codeium)** | App installation | `~/.codeium/windsurf/mcp_config.json` |
+| **Cline (VS Code)** | VS Code extension | `cline_mcp_settings.json` |
+| **Continue** | VS Code extension or npm | `~/.continue/config.json` |
+| **Roo Code** | VS Code extension | `~/.roo/mcp.json` |
+| **Aider** | CLI binary or pip | `~/.aider/aider.conf.yml` |
 
-### Quick Setup
+### Auto-Setup (Runs During Install)
 
 ```bash
 node scripts/setup.js
 ```
 
-This detects your installed AI tools and automatically configures the MCP server.
+This scans your system for installed AI tools, detects them via CLI binaries, npm packages, app directories, and VS Code extensions — then writes MCP config in the **correct format** for each tool (TOML for Codex, JSON for OpenCode, etc.).
 
 ### Manual Configuration
 
-**OpenCode** (`opencode.json`):
+**OpenCode** (`~/.opencode/config.json`):
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
@@ -140,7 +144,17 @@ This detects your installed AI tools and automatically configures the MCP server
 }
 ```
 
-**ChatGPT Codex** (`~/.codex/config.json`):
+**ChatGPT Codex** (`~/.codex/config.toml`):
+```toml
+[mcp_servers.snip-win]
+type = "local"
+command = "/path/to/node"
+args = ["/path/to/snip-win/src/mcp/server.js"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120
+```
+
+**Claude Code** (`~/.claude/settings.json`):
 ```json
 {
   "mcpServers": {
@@ -152,12 +166,13 @@ This detects your installed AI tools and automatically configures the MCP server
 }
 ```
 
-**Claude Code** (`~/.claude/settings.json`):
+**Antigravity IDE** (`~/AppData/Roaming/Antigravity/User/mcp.json`):
 ```json
 {
-  "mcpServers": {
+  "servers": {
     "snip-win": {
-      "command": "node",
+      "type": "local",
+      "command": "/path/to/node",
       "args": ["/path/to/snip-win/src/mcp/server.js"]
     }
   }
