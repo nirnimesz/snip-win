@@ -125,6 +125,12 @@ echo -ne "\r  \e[32m✓\e[0m Dependencies installed                    \n"
 # ── Read Installed Version ──
 INSTALLED_VERSION=$(node -e "try{console.log(require('$INSTALL_DIR/package.json').version)}catch(e){console.log('unknown')}" 2>/dev/null || echo "unknown")
 
+# ── Auto-detect & Configure AI Integrations ──
+echo ""
+step "Scanning for installed AI tools..."
+echo ""
+node scripts/setup.js
+
 # ── Success Banner ──
 echo ""
 echo -e "\e[32m  ╔══════════════════════════════════════════╗\e[0m"
@@ -142,13 +148,5 @@ echo ""
 echo -e "  \e[97m2. CLI:\e[0m"
 echo -e "     \e[90mnode src/cli/snip-win.js --help\e[0m"
 echo ""
-echo -e "  \e[97m3. Setup AI integration:\e[0m"
-echo -e "     \e[90mnode scripts/setup.js\e[0m"
+echo -e "  \e[97m3. Restart your AI tools to pick up MCP\e[0m"
 echo ""
-
-# ── Optional: Run Setup ──
-read -p "Configure AI CLI integrations now? (y/n): " SETUP
-if [ "$SETUP" = "y" ]; then
-    echo ""
-    node scripts/setup.js
-fi

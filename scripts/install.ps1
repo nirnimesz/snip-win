@@ -160,6 +160,12 @@ try {
     $installedVersion = $pkg.version
 } catch {}
 
+# ── Auto-detect & Configure AI Integrations ──
+Write-Host ""
+Write-Step "Scanning for installed AI tools..."
+Write-Host ""
+node scripts\setup.js
+
 # ── Success ──
 Write-Host ""
 Write-Host "  ╔══════════════════════════════════════════╗" -ForegroundColor Green
@@ -178,13 +184,5 @@ Write-Host ""
 Write-Host "  2. CLI:" -ForegroundColor White
 Write-Host "     node src\cli\snip-win.js --help" -ForegroundColor Gray
 Write-Host ""
-Write-Host "  3. Setup AI integration:" -ForegroundColor White
-Write-Host "     node scripts\setup.js" -ForegroundColor Gray
+Write-Host "  3. Restart your AI tools to pick up MCP" -ForegroundColor White
 Write-Host ""
-
-# ── Optional: Run Setup ──
-$setup = Read-Host "Configure AI CLI integrations now? (y/n)"
-if ($setup -eq "y") {
-    Write-Host ""
-    node scripts\setup.js
-}
