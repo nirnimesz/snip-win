@@ -8,7 +8,7 @@
  * - CLI binary in PATH
  * - npm global package
  * - Application directory
- * NOT config files (which we might have created ourselves).
+ * Then writes MCP config in the CORRECT format for each tool.
  */
 
 const fs = require('fs');
@@ -18,20 +18,9 @@ const { execSync } = require('child_process');
 
 const HOME = os.homedir();
 const SNIPWIN_MCP_PATH = path.join(__dirname, '..', 'src', 'mcp', 'server.js');
+const NODE_EXE = process.execPath; // Full path to node.exe
 
 // ── Helpers ──
-function snipWinMCP() {
-  return { type: 'local', command: ['node', SNIPWIN_MCP_PATH], enabled: true };
-}
-
-function snipWinArgs() {
-  return { command: 'node', args: [SNIPWIN_MCP_PATH] };
-}
-
-function snipWinCline() {
-  return { command: 'node', args: [SNIPWIN_MCP_PATH], disabled: false, alwaysAllow: [] };
-}
-
 function readJSON(fp) {
   try { return JSON.parse(fs.readFileSync(fp, 'utf-8')); } catch { return {}; }
 }
@@ -40,6 +29,26 @@ function writeJSON(fp, data) {
   const dir = path.dirname(fp);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(fp, JSON.stringify(data, null, 2));
+}
+
+function appendTOML(fp, section, config) {
+  const dir = path.dirname(fp);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  let content = fs.existsSync(fp) ? fs.readFileSync(fp, 'utf-8') : '';
+
+  const sectionHeader = `[${section}]`;
+  if (content.includes(sectionHeader)) return false;
+
+  let toml = `\n[${section}]\n`;
+  toml += `type = "local"\n`;
+  toml += `command = "${NODE_EXE.replace(/\\/g, '\\\\')}"\n`;
+  toml += `args = ["${SNIPWIN_MCP_PATH.replace(/\\/g, '\\\\')}"]\n`;
+  toml += `startup_timeout_sec = 60\n`;
+  toml += `tool_timeout_sec = 120\n`;
+
+  content += toml;
+  fs.writeFileSync(fp, content);
+  return true;
 }
 
 function fileExists(p) { try { return fs.existsSync(p); } catch { return false; } }
@@ -69,21 +78,17 @@ function getNpmBinPath(binName) {
       const out = execSync(`where ${binName}`, { encoding: 'utf8' }).trim();
       return out.split('\n')[0] || null;
     } else {
-      const out = execSync(`which ${binName}`, { encoding: 'utf8' }).trim();
-      return out || null;
+      return execSync(`which ${binName}`, { encoding: 'utf8' }).trim() || null;
     }
   } catch { return null; }
 }
 
 // ── AI Tool Definitions ──
-// Detection checks ONLY real installations, NOT config files we created
 const AI_TOOLS = [
   {
     name: 'OpenCode',
     detect: () => {
-      // Check CLI binary
       if (commandExists('opencode')) return { method: 'CLI', path: getNpmBinPath('opencode') };
-      // Check npm global
       if (npmGlobalExists('opencode-ai')) return { method: 'npm', path: 'opencode-ai' };
       return null;
     },
@@ -91,9 +96,14 @@ const AI_TOOLS = [
       const configPath = path.join(HOME, '.opencode', 'config.json');
       const config = readJSON(configPath);
       if (!config.mcp) config.mcp = {};
-      config.mcp['snip-win'] = snipWinMCP();
+      if (config.mcp['snip-win']) return { path: configPath, skipped: true };
+      config.mcp['snip-win'] = {
+        type: 'local',
+        command: [NODE_EXE, SNIPWIN_MCP_PATH],
+        enabled: true
+      };
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
@@ -104,12 +114,11 @@ const AI_TOOLS = [
       return null;
     },
     configure: () => {
-      const configPath = path.join(HOME, '.codex', 'config.json');
-      const config = readJSON(configPath);
-      if (!config.mcpServers) config.mcpServers = {};
-      config.mcpServers['snip-win'] = snipWinMCP();
-      writeJSON(configPath, config);
-      return configPath;
+      // Codex uses config.toml, NOT config.json
+      const configPath = path.join(HOME, '.codex', 'config.toml');
+      const added = appendTOML(configPath, 'mcp_servers.snip-win', {});
+      if (!added) return { path: configPath, skipped: true };
+      return { path: configPath };
     }
   },
   {
@@ -124,38 +133,42 @@ const AI_TOOLS = [
       const configPath = path.join(HOME, '.claude', 'settings.json');
       const config = readJSON(configPath);
       if (!config.mcpServers) config.mcpServers = {};
-      config.mcpServers['snip-win'] = snipWinArgs();
+      if (config.mcpServers['snip-win']) return { path: configPath, skipped: true };
+      config.mcpServers['snip-win'] = {
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH]
+      };
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
     name: 'Cursor',
     detect: () => {
-      // Windows app paths
       const winPaths = [
         path.join(HOME, 'AppData', 'Local', 'Programs', 'cursor'),
         path.join(HOME, 'AppData', 'Local', 'Programs', 'Cursor'),
         path.join('C:', 'Program Files', 'Cursor'),
         path.join('C:', 'Program Files (x86)', 'Cursor'),
+        path.join(HOME, 'scoop', 'apps', 'cursor'),
       ];
-      if (winPaths.some(dirExists)) return { method: 'app', path: winPaths.find(dirExists) };
-
-      // macOS
+      const found = winPaths.find(dirExists);
+      if (found) return { method: 'app', path: found };
       if (dirExists('/Applications/Cursor.app')) return { method: 'app', path: '/Applications/Cursor.app' };
-
-      // Linux
       if (commandExists('cursor')) return { method: 'CLI', path: getNpmBinPath('cursor') };
-
       return null;
     },
     configure: () => {
       const configPath = path.join(HOME, '.cursor', 'mcp.json');
       const config = readJSON(configPath);
       if (!config.mcpServers) config.mcpServers = {};
-      config.mcpServers['snip-win'] = snipWinArgs();
+      if (config.mcpServers['snip-win']) return { path: configPath, skipped: true };
+      config.mcpServers['snip-win'] = {
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH]
+      };
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
@@ -165,7 +178,8 @@ const AI_TOOLS = [
         path.join(HOME, 'AppData', 'Local', 'Programs', 'Windsurf'),
         path.join('C:', 'Program Files', 'Windsurf'),
       ];
-      if (winPaths.some(dirExists)) return { method: 'app', path: winPaths.find(dirExists) };
+      const found = winPaths.find(dirExists);
+      if (found) return { method: 'app', path: found };
       if (dirExists('/Applications/Windsurf.app')) return { method: 'app', path: '/Applications/Windsurf.app' };
       if (commandExists('windsurf')) return { method: 'CLI', path: getNpmBinPath('windsurf') };
       return null;
@@ -174,9 +188,13 @@ const AI_TOOLS = [
       const configPath = path.join(HOME, '.codeium', 'windsurf', 'mcp_config.json');
       const config = readJSON(configPath);
       if (!config.mcpServers) config.mcpServers = {};
-      config.mcpServers['snip-win'] = snipWinArgs();
+      if (config.mcpServers['snip-win']) return { path: configPath, skipped: true };
+      config.mcpServers['snip-win'] = {
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH]
+      };
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
@@ -196,9 +214,15 @@ const AI_TOOLS = [
       const configPath = path.join(HOME, 'AppData', 'Roaming', 'Code', 'User', 'globalStorage', 'saoudrizwan.claude-dev', 'settings', 'cline_mcp_settings.json');
       const config = readJSON(configPath);
       if (!config.mcpServers) config.mcpServers = {};
-      config.mcpServers['snip-win'] = snipWinCline();
+      if (config.mcpServers['snip-win']) return { path: configPath, skipped: true };
+      config.mcpServers['snip-win'] = {
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH],
+        disabled: false,
+        alwaysAllow: []
+      };
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
@@ -208,7 +232,8 @@ const AI_TOOLS = [
       if (dirExists(vscodeExt)) {
         try {
           const exts = fs.readdirSync(vscodeExt);
-          if (exts.some(e => e.includes('continue'))) return { method: 'vscode-ext', path: exts.find(e => e.includes('continue')) };
+          const cont = exts.find(e => e.includes('continue'));
+          if (cont) return { method: 'vscode-ext', path: cont };
         } catch {}
       }
       if (npmGlobalExists('continue')) return { method: 'npm', path: 'continue' };
@@ -218,11 +243,14 @@ const AI_TOOLS = [
       const configPath = path.join(HOME, '.continue', 'config.json');
       const config = readJSON(configPath);
       if (!config.mcpServers) config.mcpServers = [];
-      if (!config.mcpServers.some(s => s.name === 'snip-win')) {
-        config.mcpServers.push({ name: 'snip-win', command: 'node', args: [SNIPWIN_MCP_PATH] });
-      }
+      if (config.mcpServers.some(s => s.name === 'snip-win')) return { path: configPath, skipped: true };
+      config.mcpServers.push({
+        name: 'snip-win',
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH]
+      });
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
@@ -242,9 +270,13 @@ const AI_TOOLS = [
       const configPath = path.join(HOME, '.roo', 'mcp.json');
       const config = readJSON(configPath);
       if (!config.mcpServers) config.mcpServers = {};
-      config.mcpServers['snip-win'] = snipWinArgs();
+      if (config.mcpServers['snip-win']) return { path: configPath, skipped: true };
+      config.mcpServers['snip-win'] = {
+        command: NODE_EXE,
+        args: [SNIPWIN_MCP_PATH]
+      };
       writeJSON(configPath, config);
-      return configPath;
+      return { path: configPath };
     }
   },
   {
@@ -252,7 +284,6 @@ const AI_TOOLS = [
     detect: () => {
       if (commandExists('aider')) return { method: 'CLI', path: getNpmBinPath('aider') };
       if (commandExists('aider-chat')) return { method: 'CLI', path: getNpmBinPath('aider-chat') };
-      // Check pip global (Python)
       try {
         const pipOut = execSync('pip show aider-chat 2>nul || pip3 show aider-chat 2>nul', { encoding: 'utf8' });
         if (pipOut.includes('Name:')) return { method: 'pip', path: 'aider-chat' };
@@ -260,29 +291,15 @@ const AI_TOOLS = [
       return null;
     },
     configure: () => {
-      const notePath = path.join(HOME, '.aider', 'snip-win-mcp.txt');
-      const note = `To use SnipWin with Aider, add this to your .aider.conf.yml:\n\nmcp:\n  - command: node\n    args: ["${SNIPWIN_MCP_PATH}"]\n`;
-      const dir = path.dirname(notePath);
+      const configPath = path.join(HOME, '.aider', 'aider.conf.yml');
+      let content = fs.existsSync(configPath) ? fs.readFileSync(configPath, 'utf-8') : '';
+      if (content.includes('snip-win')) return { path: configPath, skipped: true };
+      const mcpBlock = `\n# SnipWin MCP Server\nmcp:\n  - command: "${NODE_EXE}"\n    args: ["${SNIPWIN_MCP_PATH}"]\n`;
+      content += mcpBlock;
+      const dir = path.dirname(configPath);
       if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(notePath, note);
-      return notePath;
-    }
-  },
-  {
-    name: 'Antigravity (Claude Proxy)',
-    detect: () => {
-      if (npmGlobalExists('antigravity-claude-proxy')) return { method: 'npm', path: 'antigravity-claude-proxy' };
-      if (commandExists('antigravity')) return { method: 'CLI', path: getNpmBinPath('antigravity') };
-      return null;
-    },
-    configure: () => {
-      // Antigravity is a proxy, not an MCP client — create a note
-      const notePath = path.join(HOME, '.antigravity', 'snip-win-mcp.txt');
-      const note = `SnipWin MCP server is available at:\n${SNIPWIN_MCP_PATH}\n\nTo use with Antigravity, configure the MCP server in your Claude proxy settings.\n`;
-      const dir = path.dirname(notePath);
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(notePath, note);
-      return notePath;
+      fs.writeFileSync(configPath, content);
+      return { path: configPath };
     }
   }
 ];
@@ -302,8 +319,12 @@ AI_TOOLS.forEach(tool => {
   const detected = tool.detect();
   if (detected) {
     try {
-      const writtenPath = tool.configure();
-      results.push({ name: tool.name, status: 'configured', method: detected.method, path: writtenPath });
+      const configResult = tool.configure();
+      if (configResult.skipped) {
+        results.push({ name: tool.name, status: 'already-configured', method: detected.method, path: configResult.path });
+      } else {
+        results.push({ name: tool.name, status: 'configured', method: detected.method, path: configResult.path });
+      }
     } catch (e) {
       results.push({ name: tool.name, status: 'error', error: e.message });
     }
@@ -314,15 +335,27 @@ AI_TOOLS.forEach(tool => {
 
 // ── Results ──
 const configured = results.filter(r => r.status === 'configured');
+const alreadyConfigured = results.filter(r => r.status === 'already-configured');
 const errors = results.filter(r => r.status === 'error');
 const notFound = results.filter(r => r.status === 'not-found');
 
 if (configured.length > 0) {
   console.log('  ═══════════════════════════════════════════');
-  console.log('  ✓ Configured MCP for:');
+  console.log('  ✓ MCP configured for:');
   console.log('  ═══════════════════════════════════════════');
   configured.forEach(r => {
     console.log(`    ✓ ${r.name}  (detected via ${r.method})`);
+    console.log(`      → ${r.path}`);
+  });
+  console.log('');
+}
+
+if (alreadyConfigured.length > 0) {
+  console.log('  ═══════════════════════════════════════════');
+  console.log('  ○ Already configured (skipped):');
+  console.log('  ═══════════════════════════════════════════');
+  alreadyConfigured.forEach(r => {
+    console.log(`    ○ ${r.name}  (detected via ${r.method})`);
     console.log(`      → ${r.path}`);
   });
   console.log('');
@@ -348,8 +381,9 @@ if (notFound.length > 0) {
   console.log('');
 }
 
+const total = configured.length + alreadyConfigured.length;
 console.log('  ═══════════════════════════════════════════');
-console.log(`  Summary: ${configured.length} configured, ${errors.length} errors, ${notFound.length} not found`);
+console.log(`  Summary: ${total} configured, ${errors.length} errors, ${notFound.length} not found`);
 console.log('  ═══════════════════════════════════════════');
 console.log('');
 console.log('  Next steps:');
